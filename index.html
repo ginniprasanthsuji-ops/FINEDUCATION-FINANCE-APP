@@ -272,13 +272,18 @@
     isSupported
   } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+  
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvRl9o-nE0Y_2oabYEFnBWHM3-M-DGIa4",
@@ -403,6 +408,7 @@ window.openPartner = async function (product) {
       document.getElementById("commissionReceived").textContent =
         money(receivedTotal);
 
+      
       leadSnapshot.forEach((docSnap) => {
         const data = docSnap.data();
         const item = document.createElement("div");
@@ -413,6 +419,61 @@ window.openPartner = async function (product) {
 
         const details = document.createElement("p");
         details.textContent =
+          (data.product || "") + " — " + (data.status || "");
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.type = "button";
+        editButton.addEventListener("click", async () => {
+          const reference = prompt("Customer name:", data.reference || "");
+          if (reference === null) return;
+
+          const status = prompt(
+            "Lead status (New, Submitted, Approved, Rejected):",
+            data.status || "New"
+          );
+          if (status === null) return;
+
+          const cleanReference = reference.trim();
+          const cleanStatus = status.trim();
+
+          if (!cleanReference || !cleanStatus) {
+            alert("Name and status are required.");
+            return;
+          }
+
+          try {
+            await updateDoc(doc(db, "adminLeads", docSnap.id), {
+              reference: cleanReference,
+              status: cleanStatus
+            });
+            adminMessage.textContent = "Lead updated successfully.";
+            await loadAdminData();
+          } catch (error) {
+            console.error("Lead update failed:", error);
+            adminMessage.textContent = "Lead update failed.";
+          }
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.type = "button";
+        deleteButton.addEventListener("click", async () => {
+          if (!confirm("Delete this lead permanently?")) return;
+
+          try {
+            await deleteDoc(doc(db, "adminLeads", docSnap.id));
+            adminMessage.textContent = "Lead deleted successfully.";
+            await loadAdminData();
+          } catch (error) {
+            console.error("Lead delete failed:", error);
+            adminMessage.textContent = "Lead delete failed.";
+          }
+        });
+
+        item.append(title, details, editButton, deleteButton);
+        leadList.appendChild(item);
+      });
           (data.product || "") + " — " + (data.status || "");
 
         item.append(title, details);
