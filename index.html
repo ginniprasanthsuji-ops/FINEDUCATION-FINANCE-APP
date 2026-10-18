@@ -6,61 +6,131 @@
   <meta name="theme-color" content="#102b50">
   <title>FINEDUCATION FINANCE APP</title>
   <meta name="description" content="Explore financial products and partner services with FINEDUCATION FINANCE.">
+
   <style>
     * { box-sizing: border-box; }
+
     body {
-      margin: 0; font-family: Arial, sans-serif;
-      background: #f3f6fb; color: #172b4d;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      color: #172b4d;
     }
+
     header {
       background: linear-gradient(135deg, #102b50, #1769aa);
-      color: white; padding: 25px 18px; text-align: center;
+      color: white;
+      padding: 25px 18px;
+      text-align: center;
     }
+
     header h1 { margin: 0 0 8px; font-size: 25px; }
     header p { margin: 0; line-height: 1.5; }
+
     nav {
-      display: flex; gap: 10px; justify-content: center;
-      flex-wrap: wrap; padding: 14px; background: white;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 14px;
+      background: white;
       box-shadow: 0 2px 8px #0000000c;
     }
+
     button, .product-link {
-      border: 0; border-radius: 9px; padding: 11px 15px;
-      background: #1769aa; color: white; font-weight: bold;
-      cursor: pointer; text-decoration: none; display: inline-block;
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 15px;
+      background: #1769aa;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
     }
+
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid #ffbf47;
+      outline-offset: 2px;
+    }
+
     main { max-width: 1000px; margin: auto; padding: 20px 14px; }
-    .welcome {
-      background: white; padding: 20px; border-radius: 14px;
-      margin-bottom: 20px; box-shadow: 0 3px 14px #102b5010;
-    }
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 15px;
-    }
-    .card {
-      background: white; padding: 20px; border-radius: 14px;
+
+    .welcome, .card {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 20px;
       box-shadow: 0 3px 14px #102b5010;
     }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .card { margin-bottom: 0; }
     .card .emoji { font-size: 32px; }
     .card h3 { margin: 12px 0 8px; }
     .card p { color: #53657c; line-height: 1.5; min-height: 45px; }
+
     .status {
-      margin-top: 22px; background: #e7f0fc; border-radius: 10px;
-      padding: 14px; line-height: 1.6;
+      margin-top: 22px;
+      background: #e7f0fc;
+      border-radius: 10px;
+      padding: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
     }
-    footer { text-align: center; padding: 22px; color: #65748b; font-size: 13px; }
+
+    #admin-dashboard[hidden] { display: none !important; }
+
+    #admin-dashboard .product-card {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    #admin-dashboard .product-card h3 { margin: 0 0 5px; }
+    #admin-dashboard .product-card p { margin: 0; font-size: 20px; }
+
+    #admin-login label {
+      display: block;
+      margin: 12px 0 5px;
+      font-weight: bold;
+    }
+
+    #admin-login input {
+      width: 100%;
+      max-width: 420px;
+      padding: 11px;
+      border: 1px solid #aab8ca;
+      border-radius: 7px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 22px;
+      color: #65748b;
+      font-size: 13px;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <h1>FINEDUCATION FINANCE</h1>
     <p>Your financial services access point</p>
   </header>
 
-  <nav>
-    <button onclick="showSection('home')">Home</button>
-    <button onclick="showSection('products')">Financial Products</button>
-    <button onclick="showSection('about')">About Us</button>
+  <nav aria-label="Main navigation">
+    <button type="button" onclick="showSection('home')">Home</button>
+    <button type="button" onclick="showSection('products')">Financial Products</button>
+    <button type="button" onclick="showSection('about')">About Us</button>
   </nav>
 
   <main>
@@ -72,36 +142,41 @@
 
     <section id="products">
       <h2>Explore Products</h2>
+
       <div class="grid">
         <article class="card">
           <div class="emoji">📈</div>
           <h3>Mutual Funds</h3>
           <p>Explore mutual fund services through an authorized partner.</p>
-          <button onclick="openPartner('mutual_funds')">Explore</button>
+          <button type="button" onclick="openPartner('mutual_funds')">Explore</button>
         </article>
+
         <article class="card">
           <div class="emoji">🏦</div>
           <h3>Loans</h3>
           <p>Access loan enquiry services through our partner.</p>
-          <button onclick="openPartner('loans')">Explore</button>
+          <button type="button" onclick="openPartner('loans')">Explore</button>
         </article>
+
         <article class="card">
           <div class="emoji">🛡️</div>
           <h3>Insurance</h3>
           <p>Explore insurance information through an authorized partner.</p>
-          <button onclick="openPartner('insurance')">Explore</button>
+          <button type="button" onclick="openPartner('insurance')">Explore</button>
         </article>
+
         <article class="card">
           <div class="emoji">💳</div>
           <h3>Credit Cards</h3>
           <p>View credit card options through our partner.</p>
-          <button onclick="openPartner('credit_cards')">Explore</button>
+          <button type="button" onclick="openPartner('credit_cards')">Explore</button>
         </article>
+
         <article class="card">
           <div class="emoji">📜</div>
           <h3>Bonds</h3>
           <p>Bond services will be added after an authorized partner is configured.</p>
-          <button onclick="alert('Bond partner setup is pending.')">Coming Soon</button>
+          <button type="button" onclick="alert('Bond partner setup is pending.')">Coming Soon</button>
         </article>
       </div>
     </section>
@@ -113,174 +188,197 @@
     </section>
 
     <section class="status">
-      <strong>Important:</strong> This app does not guarantee returns, loan approval,
-      insurance acceptance, or credit card approval. Investments are subject to risk.
+      <strong>Important:</strong>
+      This app does not guarantee returns, loan approval, insurance acceptance,
+      or credit card approval. Investments are subject to risk.
       Verify details with the relevant authorized provider before applying.
     </section>
-  <section id="admin-login" class="status">
-  <h2>Admin Login</h2>
-  <form id="adminLoginForm">
-    <label for="adminEmail">Admin Email</label>
-    <input
-      type="email"
-      id="adminEmail"
-      autocomplete="username"
-      required
-    >
 
-    <label for="adminPassword">Password</label>
-    <input
-      type="password"
-      id="adminPassword"
-      autocomplete="current-password"
-      required
-    >
+    <section id="admin-login" class="status">
+      <h2>Admin Login</h2>
+      <form id="adminLoginForm">
+        <label for="adminEmail">Admin Email</label>
+        <input type="email" id="adminEmail"
+          autocomplete="username" required>
 
-    <button type="submit">Login</button>
-    <p id="loginMessage" role="status"></p>
-  </form>
-</section>
-<section id="admin-dashboard" class="status">
-  <h2>Admin Dashboard</h2>
+        <label for="adminPassword">Password</label>
+        <input type="password" id="adminPassword"
+          autocomplete="current-password" required>
 
-  <div class="product-card">
-    <h3>Referral Clicks</h3>
-    <p id="totalClicks">0</p>
-  </div>
+        <button type="submit">Login</button>
+        <p id="loginMessage" role="status" aria-live="polite">
+          Please login to access the dashboard.
+        </p>
+      </form>
+    </section>
 
-  <div class="product-card">
-    <h3>Applications</h3>
-    <p id="totalApplications">0</p>
-  </div>
+    <section id="admin-dashboard" class="status" hidden>
+      <h2>Admin Dashboard</h2>
 
-  <div class="product-card">
-    <h3>Commission Due</h3>
-    <p id="commissionDue">₹0</p>
-  </div>
+      <div class="product-card">
+        <h3>Referral Click Events</h3>
+        <p id="totalClicks">Analytics enabled status only</p>
+      </div>
 
-  <div class="product-card">
-    <h3>Commission Received</h3>
-    <p id="commissionReceived">₹0</p>
-  </div>
+      <div class="product-card">
+        <h3>Applications</h3>
+        <p id="totalApplications">Not connected</p>
+      </div>
 
-  <button type="button" id="adminLogout" hidden>
-    Logout
-  </button>
-</section>
- </main>
+      <div class="product-card">
+        <h3>Commission Due</h3>
+        <p id="commissionDue">Not connected</p>
+      </div>
+
+      <div class="product-card">
+        <h3>Commission Received</h3>
+        <p id="commissionReceived">Not connected</p>
+      </div>
+
+      <p>
+        Note: This dashboard does not yet display live Analytics counts,
+        application records, or commission records.
+      </p>
+
+      <button type="button" id="adminLogout" hidden>Logout</button>
+    </section>
+  </main>
 
   <footer>
     FINEDUCATION FINANCE APP · Financial awareness and partner access
   </footer>
 
- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+  <script type="module">
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDvRl9o-nE0Y_2oabYEFnBWHM3-M-DGIa4",
-    authDomain: "fineducation-finance-app-86376.firebaseapp.com",
-    projectId: "fineducation-finance-app-86376",
-    storageBucket: "fineducation-finance-app-86376.firebasestorage.app",
-    messagingSenderId: "199573862079",
-    appId: "1:199573862079:web:823dd176d299768a87780a"
-  };
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    import {
+      getAnalytics,
+      logEvent,
+      isSupported
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 
-  window.showSection = function (id) {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+    const firebaseConfig = {
+      apiKey: "AIzaSyDvRl9o-nE0Y_2oabYEFnBWHM3-M-DGIa4",
+      authDomain: "fineducation-finance-app-86376.firebaseapp.com",
+      projectId: "fineducation-finance-app-86376",
+      storageBucket: "fineducation-finance-app-86376.firebasestorage.app",
+      messagingSenderId: "199573862079",
+      appId: "1:199573862079:web:823dd176d299768a87780a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Google Analytics is optional; the app should still work if unavailable.
+    let analyticsPromise = isSupported()
+      .then((supported) => supported ? getAnalytics(app) : null)
+      .catch((error) => {
+        console.warn("Analytics is unavailable.");
+        return null;
+      });
+
+    window.showSection = function (id) {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    const partnerLinks = {
+      mutual_funds:
+        "https://zfunds.in/visiting-card/caa2db3c-242b-4631-8726-de28a1b8a923",
+      loans:
+        "https://crm.oneandro.com/short/O6BeN8",
+      insurance:
+        "https://advisor.turtlemintinsurance.com/profile/GIN3217335/ginni_prasanth",
+      credit_cards:
+        "https://leads.banksathi.com/?h=M29DSC9uZi9ONG1Jc3J5RUtRUGhMdz09"
+    };
+
+    window.openPartner = function (product) {
+      const url = partnerLinks[product];
+
+      if (!url) {
+        alert("Partner link is not configured.");
+        return;
+      }
+
+      // Open immediately during the click gesture so mobile popup blockers
+      // are less likely to prevent the partner page from opening.
+      window.open(url, "_blank", "noopener,noreferrer");
+
+      // Record an event in Google Analytics if supported.
+      analyticsPromise.then((analytics) => {
+        if (analytics) {
+          logEvent(analytics, "partner_referral_click", {
+            product_name: product
+          });
+        }
+      }).catch(() => {
+        console.warn("Referral click analytics could not be recorded.");
+      });
+    };
+
+    const loginForm = document.getElementById("adminLoginForm");
+    const loginMessage = document.getElementById("loginMessage");
+    const dashboard = document.getElementById("admin-dashboard");
+    const logoutButton = document.getElementById("adminLogout");
+
+    if (dashboard) dashboard.hidden = true;
+    if (logoutButton) logoutButton.hidden = true;
+
+    if (loginForm) {
+      loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const email = document.getElementById("adminEmail").value.trim();
+        const password = document.getElementById("adminPassword").value;
+
+        loginMessage.textContent = "Logging in...";
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          loginForm.reset();
+          loginMessage.textContent = "Login successful.";
+        } catch (error) {
+          console.error("Admin login failed:", error.code);
+          loginMessage.textContent =
+            "Login failed. Check your email and password.";
+        }
+      });
     }
-  };
- const partnerLinks = {
-  mutual_funds:
-    "https://zfunds.in/visiting-card/caa2db3c-242b-4631-8726-de28a1b8a923",
-  loans:
-    "https://crm.oneandro.com/short/O6BeN8",
-  insurance:
-    "https://advisor.turtlemintinsurance.com/profile/GIN3217335/ginni_prasanth",
-  credit_cards:
-    "https://leads.banksathi.com/?h=M29DSC9uZi9ONG1Jc3J5RUtRUGhMdz09"
-};
 
-window.openPartner = function (product) {
-  const url = partnerLinks[product];
+    onAuthStateChanged(auth, function (user) {
+      // Sign-in alone is not proof of admin authorization.
+      // Keep the dashboard hidden until proper admin authorization is added.
+      if (dashboard) dashboard.hidden = true;
+      if (logoutButton) logoutButton.hidden = true;
 
-  if (!url) {
-    alert("Partner link is not configured.");
-    return;
-  }
-
-  window.open(url, "_blank", "noopener,noreferrer");
-};
-
-  const loginForm = document.getElementById("adminLoginForm");
-  const loginMessage = document.getElementById("loginMessage");
-
-  if (loginForm) {
-    loginForm.addEventListener("submit", async function (event) {
-      event.preventDefault();
-
-      const email = document.getElementById("adminEmail").value.trim();
-      const password = document.getElementById("adminPassword").value;
-
-      loginMessage.textContent = "Logging in...";
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        loginMessage.textContent = "Login successful.";
-        loginForm.reset();
-      } catch (error) {
-        console.error(error.code);
-        loginMessage.textContent =
-          "Login failed. Check your email and password.";
+      if (loginMessage) {
+        loginMessage.textContent = user
+          ? "Signed in. Admin authorization must be configured before dashboard access."
+          : "Please login to access the dashboard.";
       }
     });
-  }
 
-  
-const dashboard = document.getElementById("admin-dashboard");
-const logoutButton = document.getElementById("adminLogout");
-
-if (dashboard) {
-  dashboard.hidden = true;
-}
-
-onAuthStateChanged(auth, function (user) {
-  if (dashboard) {
-    dashboard.hidden = !user;
-  }
-
-  if (logoutButton) {
-    logoutButton.hidden = !user;
-  }
-
-  if (loginMessage) {
-    loginMessage.textContent = user
-      ? "Admin signed in: " + user.email
-      : "Please login to access the dashboard.";
-  }
-});
-
-if (logoutButton) {
-  logoutButton.addEventListener("click", async function () {
-    try {
-      await signOut(auth);
-      loginMessage.textContent = "Logged out successfully.";
-    } catch (error) {
-      loginMessage.textContent = "Logout failed. Please try again.";
+    if (logoutButton) {
+      logoutButton.addEventListener("click", async function () {
+        try {
+          await signOut(auth);
+          if (loginMessage) loginMessage.textContent = "Logged out successfully.";
+        } catch (error) {
+          if (loginMessage) loginMessage.textContent = "Logout failed. Please try again.";
+        }
+      });
     }
-  });
-}
-
-</script> 
+  </script>
 </body>
 </html>
