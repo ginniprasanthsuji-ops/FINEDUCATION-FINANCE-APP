@@ -146,15 +146,67 @@
     FINEDUCATION FINANCE APP · Financial awareness and partner access
   </footer>
 
-  <script>
-    function showSection(id) {
-      const section = document.getElementById(id);
-      if (section) section.scrollIntoView({ behavior: "smooth" });
-    }
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-    function openPartner(product) {
-      alert("Referral tracking will be connected after Firebase setup. Product: " + product);
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvRl9o-nE0Y_2oabYEFnBWHM3-M-DGIa4",
+    authDomain: "fineducation-finance-app-86376.firebaseapp.com",
+    projectId: "fineducation-finance-app-86376",
+    storageBucket: "fineducation-finance-app-86376.firebasestorage.app",
+    messagingSenderId: "199573862079",
+    appId: "1:199573862079:web:823dd176d299768a87780a"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.showSection = function (id) {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
     }
-  </script>
+  };
+
+  window.openPartner = function (product) {
+    alert("Referral tracking will be connected next. Product: " + product);
+  };
+
+  const loginForm = document.getElementById("adminLoginForm");
+  const loginMessage = document.getElementById("loginMessage");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("adminEmail").value.trim();
+      const password = document.getElementById("adminPassword").value;
+
+      loginMessage.textContent = "Logging in...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        loginMessage.textContent = "Login successful.";
+        loginForm.reset();
+      } catch (error) {
+        console.error(error.code);
+        loginMessage.textContent =
+          "Login failed. Check your email and password.";
+      }
+    });
+  }
+
+  onAuthStateChanged(auth, function (user) {
+    if (loginMessage && user) {
+      loginMessage.textContent = "Signed in: " + user.email;
+    }
+  });
+</script> 
 </body>
 </html>
