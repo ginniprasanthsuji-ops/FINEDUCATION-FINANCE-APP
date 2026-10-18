@@ -1,0 +1,12 @@
+
+{
+  "name": "FINEDUCATION FINANCE",
+  "short_name": "FINEDUCATION",
+  "description": "Your financial services access point",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0b2942"
+}
