@@ -1,1 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b50">
+  <title>FINEDUCATION FINANCE APP</title>
+  <meta name="description" content="Explore financial products and partner services with FINEDUCATION FINANCE.">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Arial, sans-serif;
+      background: #f3f6fb; color: #172b4d;
+    }
+    header {
+      background: linear-gradient(135deg, #102b50, #1769aa);
+      color: white; padding: 25px 18px; text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 25px; }
+    header p { margin: 0; line-height: 1.5; }
+    nav {
+      display: flex; gap: 10px; justify-content: center;
+      flex-wrap: wrap; padding: 14px; background: white;
+      box-shadow: 0 2px 8px #0000000c;
+    }
+    button, .product-link {
+      border: 0; border-radius: 9px; padding: 11px 15px;
+      background: #1769aa; color: white; font-weight: bold;
+      cursor: pointer; text-decoration: none; display: inline-block;
+    }
+    main { max-width: 1000px; margin: auto; padding: 20px 14px; }
+    .welcome {
+      background: white; padding: 20px; border-radius: 14px;
+      margin-bottom: 20px; box-shadow: 0 3px 14px #102b5010;
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 15px;
+    }
+    .card {
+      background: white; padding: 20px; border-radius: 14px;
+      box-shadow: 0 3px 14px #102b5010;
+    }
+    .card .emoji { font-size: 32px; }
+    .card h3 { margin: 12px 0 8px; }
+    .card p { color: #53657c; line-height: 1.5; min-height: 45px; }
+    .status {
+      margin-top: 22px; background: #e7f0fc; border-radius: 10px;
+      padding: 14px; line-height: 1.6;
+    }
+    footer { text-align: center; padding: 22px; color: #65748b; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FINEDUCATION FINANCE</h1>
+    <p>Your financial services access point</p>
+  </header>
 
+  <nav>
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('products')">Financial Products</button>
+    <button onclick="showSection('about')">About Us</button>
+  </nav>
+
+  <main>
+    <section id="home" class="welcome">
+      <h2>Welcome!</h2>
+      <p>Explore financial products and access our authorized partners through their official referral links.</p>
+      <p><strong>Simple. Accessible. Transparent.</strong></p>
+    </section>
+
+    <section id="products">
+      <h2>Explore Products</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="emoji">📈</div>
+          <h3>Mutual Funds</h3>
+          <p>Explore mutual fund services through an authorized partner.</p>
+          <button onclick="openPartner('mutual_funds')">Explore</button>
+        </article>
+        <article class="card">
+          <div class="emoji">🏦</div>
+          <h3>Loans</h3>
+          <p>Access loan enquiry services through our partner.</p>
+          <button onclick="openPartner('loans')">Explore</button>
+        </article>
+        <article class="card">
+          <div class="emoji">🛡️</div>
+          <h3>Insurance</h3>
+          <p>Explore insurance information through an authorized partner.</p>
+          <button onclick="openPartner('insurance')">Explore</button>
+        </article>
+        <article class="card">
+          <div class="emoji">💳</div>
+          <h3>Credit Cards</h3>
+          <p>View credit card options through our partner.</p>
+          <button onclick="openPartner('credit_cards')">Explore</button>
+        </article>
+        <article class="card">
+          <div class="emoji">📜</div>
+          <h3>Bonds</h3>
+          <p>Bond services will be added after an authorized partner is configured.</p>
+          <button onclick="alert('Bond partner setup is pending.')">Coming Soon</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="status">
+      <h3>About FINEDUCATION FINANCE</h3>
+      <p>We help customers find financial service information and access partner services.</p>
+      <p>Product availability and eligibility depend on the respective provider.</p>
+    </section>
+
+    <section class="status">
+      <strong>Important:</strong> This app does not guarantee returns, loan approval,
+      insurance acceptance, or credit card approval. Investments are subject to risk.
+      Verify details with the relevant authorized provider before applying.
+    </section>
+  </main>
+
+  <footer>
+    FINEDUCATION FINANCE APP · Financial awareness and partner access
+  </footer>
+
+  <script>
+    function showSection(id) {
+      const section = document.getElementById(id);
+      if (section) section.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function openPartner(product) {
+      alert("Referral tracking will be connected after Firebase setup. Product: " + product);
+    }
+  </script>
+</body>
+</html>
