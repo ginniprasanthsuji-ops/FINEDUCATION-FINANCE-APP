@@ -325,28 +325,39 @@
       "https://leads.banksathi.com/?h=M29DSC9uZi9ONG1Jc3J5RUtRUGhMdz09"
   };
 
-  window.openPartner = function (product) {
-    const url = partnerLinks[product];
+  
+window.openPartner = async function (product) {
+  const url = partnerLinks[product];
 
-    if (!url) {
-      alert("Partner link is not configured.");
-      return;
+  if (!url) {
+    alert("Partner link is not configured.");
+    return;
+  }
+
+  // Record the click in Google Analytics.
+  if (analytics) {
+    try {
+      logEvent(analytics, "partner_referral_click", {
+        product: product
+      });
+    } catch (error) {
+      console.warn("Analytics event could not be recorded.");
     }
+  }
 
-    // Record the click in Google Analytics, then open the partner.
-    if (analytics) {
-      try {
-        logEvent(analytics, "partner_referral_click", {
-          product: product
-        });
-      } catch (error) {
-        console.warn("Analytics event could not be recorded.");
-      }
-    }
+  // Record the click in Firestore, if configured.
+  try {
+    await addDoc(collection(db, "referralClicks"), {
+      product: product,
+      createdAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.warn("Firestore click could not be recorded:", error);
+  }
 
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
-
+  window.open(url, "_blank", "noopener,noreferrer");
+};
+  
   const loginForm = document.getElementById("adminLoginForm");
   const loginMessage = document.getElementById("loginMessage");
   const adminMessage = document.getElementById("adminMessage");
