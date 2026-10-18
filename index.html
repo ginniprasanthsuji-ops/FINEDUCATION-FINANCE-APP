@@ -9,24 +9,20 @@
 
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f3f6fb;
       color: #172b4d;
     }
-
     header {
       background: linear-gradient(135deg, #102b50, #1769aa);
       color: white;
       padding: 25px 18px;
       text-align: center;
     }
-
     header h1 { margin: 0 0 8px; font-size: 25px; }
     header p { margin: 0; line-height: 1.5; }
-
     nav {
       display: flex;
       gap: 10px;
@@ -36,7 +32,6 @@
       background: white;
       box-shadow: 0 2px 8px #0000000c;
     }
-
     button {
       border: 0;
       border-radius: 9px;
@@ -47,9 +42,7 @@
       cursor: pointer;
       margin: 3px;
     }
-
     button.danger { background: #b42318; }
-
     input, select, textarea {
       display: block;
       width: 100%;
@@ -61,9 +54,7 @@
       color: #172b4d;
       font: inherit;
     }
-
     main { max-width: 1000px; margin: auto; padding: 20px 14px; }
-
     .welcome, .card, .status {
       background: white;
       padding: 20px;
@@ -71,42 +62,35 @@
       margin-bottom: 20px;
       box-shadow: 0 3px 14px #102b5010;
     }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
     }
-
     .emoji { font-size: 32px; }
     .card h3 { margin: 12px 0 8px; }
     .card p { color: #53657c; line-height: 1.5; min-height: 45px; }
     .status { background: #e7f0fc; line-height: 1.6; }
-
     .metric {
       background: white;
       padding: 14px;
       margin: 10px 0;
       border-radius: 10px;
     }
-
     .metric h3 { margin: 0 0 6px; }
     .metric p { font-size: 20px; font-weight: bold; margin: 0; }
     .hidden { display: none !important; }
     .notice { font-size: 14px; color: #53657c; }
-
     footer {
       text-align: center;
       padding: 22px;
       color: #65748b;
       font-size: 13px;
+      line-height: 1.5;
     }
-
     #leadSearch { margin-top: 12px; }
     .lead-actions { margin-top: 12px; }
     .lead-actions button { min-width: 75px; }
-
-    footer { line-height: 1.5; }
   </style>
 </head>
 
@@ -202,11 +186,10 @@
     <h2>Admin Dashboard</h2>
 
     <div class="metric">
-      <h3>Referral Clicks</h3>
-      <p id="totalClicks">View in Google Analytics</p>
-      <p class="notice">
-        Click events are recorded in Analytics. This page does not fetch
-        Analytics report totals automatically.
+      <h3>Total Referral Clicks</h3>
+      <p id="totalClicks">Loading...</p>
+      <p id="clickMessage" class="notice">
+        Counts are loaded from Firestore.
       </p>
     </div>
 
@@ -235,7 +218,7 @@
         <option value="credit_cards">Credit Cards</option>
       </select>
 
-      <label for="leadReference">Your internal reference (avoid sensitive data)</label>
+      <label for="leadReference">Internal reference (avoid sensitive data)</label>
       <input id="leadReference" maxlength="80" required>
 
       <label for="leadStatus">Application status</label>
@@ -268,12 +251,9 @@
 
     <h3>Saved Leads</h3>
     <label for="leadSearch">Search Saved Leads</label>
-    <input
-      id="leadSearch"
-      type="search"
-      placeholder="Search by name, product or status..."
-      autocomplete="off"
-    >
+    <input id="leadSearch" type="search"
+           placeholder="Search by reference, product or status..."
+           autocomplete="off">
     <p id="leadSearchMessage" class="notice" aria-live="polite"></p>
     <div id="leadList"></div>
 
@@ -324,7 +304,6 @@
   };
 
   const ADMIN_UID = "3moc9nQJlnVD32IQ6SzbxW6n2T03";
-
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -362,6 +341,9 @@
       return;
     }
 
+    // Open the partner page even if click tracking fails.
+    const newTab = window.open("about:blank", "_blank");
+
     if (analytics) {
       try {
         logEvent(analytics, "partner_referral_click", { product });
@@ -370,16 +352,13 @@
       }
     }
 
-    // Open the partner even if optional click logging fails.
-    const newTab = window.open("about:blank", "_blank");
-
     try {
       await addDoc(collection(db, "referralClicks"), {
         product,
         createdAt: serverTimestamp()
       });
     } catch (error) {
-      console.warn("Firestore click could not be recorded:", error);
+      console.warn("Referral click could not be saved:", error);
     }
 
     if (newTab) {
@@ -435,8 +414,7 @@
       return searchable.includes(query);
     });
 
-    leadSearchMessage.textContent =
-      `${filtered.length} lead(s) shown`;
+    leadSearchMessage.textContent = `${filtered.length} lead(s) shown`;
 
     if (filtered.length === 0) {
       const empty = document.createElement("p");
@@ -471,16 +449,11 @@
           return;
         }
 
-        const reference = prompt(
-          "Internal lead reference:",
-          data.reference || ""
-        );
+        const reference = prompt("Internal lead reference:", data.reference || "");
         if (reference === null) return;
 
-        const productOptions =
-          "Enter one product key:\nmutual_funds\nloans\ninsurance\ncredit_cards";
         const product = prompt(
-          productOptions,
+          "Product key: mutual_funds, loans, insurance, credit_cards",
           data.product || "mutual_funds"
         );
         if (product === null) return;
@@ -494,24 +467,18 @@
         const cleanReference = reference.trim();
         const cleanProduct = product.trim();
         const cleanStatus = status.trim();
-        const allowedProducts = [
-          "mutual_funds", "loans", "insurance", "credit_cards"
-        ];
-        const allowedStatuses = [
-          "New", "Submitted", "Approved", "Rejected", "Completed"
-        ];
 
         if (!cleanReference || cleanReference.length > 80) {
-          alert("Enter a reference from 1 to 80 characters.");
+          alert("Reference must be 1–80 characters.");
           return;
         }
 
-        if (!allowedProducts.includes(cleanProduct)) {
+        if (!["mutual_funds", "loans", "insurance", "credit_cards"].includes(cleanProduct)) {
           alert("Product key is not valid.");
           return;
         }
 
-        if (!allowedStatuses.includes(cleanStatus)) {
+        if (!["New", "Submitted", "Approved", "Rejected", "Completed"].includes(cleanStatus)) {
           alert("Status is not valid.");
           return;
         }
@@ -522,13 +489,11 @@
             product: cleanProduct,
             status: cleanStatus
           });
-
           adminMessage.textContent = "Lead updated successfully.";
           await loadAdminData();
         } catch (error) {
-          console.error("Lead update failed:", error);
-          adminMessage.textContent =
-            "Lead update failed. Check Firestore Security Rules.";
+          console.error(error);
+          adminMessage.textContent = "Lead update failed. Check Firestore Security Rules.";
         }
       });
 
@@ -543,19 +508,15 @@
           return;
         }
 
-        const confirmed = confirm(
-          `Permanently delete lead "${data.reference || "Lead"}"?`
-        );
-        if (!confirmed) return;
+        if (!confirm(`Permanently delete lead "${data.reference || "Lead"}"?`)) return;
 
         try {
           await deleteDoc(doc(db, "adminLeads", id));
           adminMessage.textContent = "Lead deleted successfully.";
           await loadAdminData();
         } catch (error) {
-          console.error("Lead delete failed:", error);
-          adminMessage.textContent =
-            "Lead delete failed. Check Firestore Security Rules.";
+          console.error(error);
+          adminMessage.textContent = "Lead delete failed. Check Firestore Security Rules.";
         }
       });
 
@@ -569,10 +530,25 @@
     leadList.replaceChildren();
     leadSearchMessage.textContent = "Loading leads...";
 
+    // Referral click count is loaded separately so a click-count
+    // permission error will not stop Leads and Commission from loading.
+    const clickCount = document.getElementById("totalClicks");
+    const clickMessage = document.getElementById("clickMessage");
+
+    try {
+      const clickSnapshot = await getDocs(collection(db, "referralClicks"));
+      clickCount.textContent = clickSnapshot.size.toLocaleString("en-IN");
+      clickMessage.textContent = "Total click records saved in Firestore.";
+    } catch (error) {
+      console.error("Referral count could not be loaded:", error);
+      clickCount.textContent = "Unavailable";
+      clickMessage.textContent =
+        "Admin read permission for referralClicks may be missing in Firestore Rules.";
+    }
+
     try {
       const leadSnapshot = await getDocs(collection(db, "adminLeads"));
-      const commissionSnapshot =
-        await getDocs(collection(db, "adminCommissions"));
+      const commissionSnapshot = await getDocs(collection(db, "adminCommissions"));
 
       savedLeadDocs = leadSnapshot.docs.map((docSnap) => ({
         id: docSnap.id,
@@ -602,7 +578,7 @@
       console.error("Admin data loading failed:", error);
       leadSearchMessage.textContent = "";
       adminMessage.textContent =
-        "Data could not be loaded. Check Firestore Security Rules.";
+        "Leads or Commission could not be loaded. Check Firestore Security Rules.";
     }
   }
 
@@ -621,8 +597,7 @@
 
       if (!isAdmin(result.user)) {
         await signOut(auth);
-        loginMessage.textContent =
-          "This account is not authorized as admin.";
+        loginMessage.textContent = "This account is not authorized as admin.";
         return;
       }
 
@@ -630,8 +605,7 @@
       loginForm.reset();
     } catch (error) {
       console.error("Login failed:", error);
-      loginMessage.textContent =
-        "Login failed. Check your email and password.";
+      loginMessage.textContent = "Login failed. Check your email and password.";
     }
   });
 
@@ -644,8 +618,7 @@
 
     if (user && !allowed) {
       await signOut(auth);
-      loginMessage.textContent =
-        "This account is not authorized as admin.";
+      loginMessage.textContent = "This account is not authorized as admin.";
       return;
     }
 
@@ -655,6 +628,10 @@
     } else {
       savedLeadDocs = [];
       leadList.replaceChildren();
+      document.getElementById("totalClicks").textContent = "—";
+      document.getElementById("totalApplications").textContent = "0";
+      document.getElementById("commissionDue").textContent = "₹0";
+      document.getElementById("commissionReceived").textContent = "₹0";
     }
   });
 
@@ -689,8 +666,7 @@
       await loadAdminData();
     } catch (error) {
       console.error("Lead save failed:", error);
-      adminMessage.textContent =
-        "Lead could not be saved. Check Firestore Rules.";
+      adminMessage.textContent = "Lead could not be saved. Check Firestore Rules.";
     }
   });
 
@@ -704,9 +680,7 @@
 
     const reference =
       document.getElementById("commissionReference").value.trim();
-    const due = Number(
-      document.getElementById("commissionDueInput").value
-    );
+    const due = Number(document.getElementById("commissionDueInput").value);
     const received = Number(
       document.getElementById("commissionReceivedInput").value
     );
@@ -731,8 +705,7 @@
       await loadAdminData();
     } catch (error) {
       console.error("Commission save failed:", error);
-      adminMessage.textContent =
-        "Commission could not be saved. Check Firestore Rules.";
+      adminMessage.textContent = "Commission could not be saved. Check Firestore Rules.";
     }
   });
 
