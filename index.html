@@ -229,11 +229,41 @@
     });
   }
 
-  onAuthStateChanged(auth, function (user) {
-    if (loginMessage && user) {
-      loginMessage.textContent = "Signed in: " + user.email;
+  
+const dashboard = document.getElementById("admin-dashboard");
+const logoutButton = document.getElementById("adminLogout");
+
+if (dashboard) {
+  dashboard.hidden = true;
+}
+
+onAuthStateChanged(auth, function (user) {
+  if (dashboard) {
+    dashboard.hidden = !user;
+  }
+
+  if (logoutButton) {
+    logoutButton.hidden = !user;
+  }
+
+  if (loginMessage) {
+    loginMessage.textContent = user
+      ? "Admin signed in: " + user.email
+      : "Please login to access the dashboard.";
+  }
+});
+
+if (logoutButton) {
+  logoutButton.addEventListener("click", async function () {
+    try {
+      await signOut(auth);
+      loginMessage.textContent = "Logged out successfully.";
+    } catch (error) {
+      loginMessage.textContent = "Logout failed. Please try again.";
     }
   });
+}
+
 </script> 
 </body>
 </html>
