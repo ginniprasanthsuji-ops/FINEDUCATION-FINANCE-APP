@@ -200,10 +200,27 @@
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+ const partnerLinks = {
+  mutual_funds:
+    "https://zfunds.in/visiting-card/caa2db3c-242b-4631-8726-de28a1b8a923",
+  loans:
+    "https://crm.oneandro.com/short/O6BeN8",
+  insurance:
+    "https://advisor.turtlemintinsurance.com/profile/GIN3217335/ginni_prasanth",
+  credit_cards:
+    "https://leads.banksathi.com/?h=M29DSC9uZi9ONG1Jc3J5RUtRUGhMdz09"
+};
 
-  window.openPartner = function (product) {
-    alert("Referral tracking will be connected next. Product: " + product);
-  };
+window.openPartner = function (product) {
+  const url = partnerLinks[product];
+
+  if (!url) {
+    alert("Partner link is not configured.");
+    return;
+  }
+
+  window.open(url, "_blank", "noopener,noreferrer");
+};
 
   const loginForm = document.getElementById("adminLoginForm");
   const loginMessage = document.getElementById("loginMessage");
